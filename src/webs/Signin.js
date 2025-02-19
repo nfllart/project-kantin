@@ -20,7 +20,6 @@ export default function Signin() {
         headers: {
           makerID: '28'
         },
-        data: data
       })
       .then((res) => {
         console.log(res);
@@ -32,6 +31,8 @@ export default function Signin() {
           else if (res.data.user.role === 'admin_stan') {
             alert("Login Berhasil");
             navigate('/adminhome');
+          } else {
+            alert("Invalid role for this login page");
           }
         }
         
@@ -103,7 +104,15 @@ export default function Signin() {
                     Sign in
                   </button>
                 </div>
-                {/* <p>{{massages}}</p> */}
+                <div>
+                  <button
+                    type="button"
+                    className="flex w-full justify-center rounded-md bg-gray-600 px-4 py-2 text-base font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                    onClick={() => navigate('/loginstan')}
+                  >
+                    Login Stan
+                  </button>
+                </div>
                 <div>
                 <button
             type="button"
@@ -118,4 +127,3 @@ export default function Signin() {
         </div>
     )
   }
-  

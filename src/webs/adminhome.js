@@ -35,10 +35,16 @@ export default function AdminHome() {
         formData.append('nama_makanan', nama_makanan);
         formData.append('jenis', jenis);
         formData.append('harga', harga);
-        formData.append('foto', foto);
+        formData.append('foto', foto); // Ensure the file is appended correctly
         formData.append('deskripsi', deskripsi);
 
-        console.log('Form Data:', formData);
+        console.log('Form Data:', {
+            nama_makanan,
+            jenis,
+            harga,
+            foto,
+            deskripsi
+        });
 
         axios({
             method: 'POST',
@@ -47,6 +53,7 @@ export default function AdminHome() {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 makerID: '28',
+                "Authorization": "bearer "+localStorage.getItem("token") 
             },
         })
         .then((res) => {
@@ -64,8 +71,9 @@ export default function AdminHome() {
             }
         })
         .catch((err) => {
-            console.error('Error adding menu:', err);
-            setError('Failed to add menu.');
+            console.error('Error adding menu:', err.response ? err.response.data : err.message);
+            setError('Failed to add menu: ' + (err.response ? err.response.data.message : err.message));
+            console.log(err)
         });
     };
 
@@ -140,8 +148,9 @@ export default function AdminHome() {
                             {error && <div className="text-red-500 text-sm">{error}</div>}
                             <input type='text' name='nama_makanan' placeholder='Nama Menu' value={nama_makanan} onChange={(e) => setNama_makanan(e.target.value)} className='w-full p-2 border rounded mb-2' />
                             <select name='jenis' value={jenis} onChange={(e) => setjenis(e.target.value)} className='w-full p-2 border rounded mb-2'>
-                                <option value='Makanan'>Makanan</option>
-                                <option value='Minuman'>Minuman</option>
+                                <option value=''>Pilih Jenis</option> {/* Add a default option */}
+                                <option value='makanan'>Makanan</option> {/* Option for Makanan */}
+                                <option value='minuman'>Minuman</option> {/* Option for Minuman */}
                             </select>
                             <input type='number' name='harga' placeholder='Harga' value={harga} onChange={(e) => setharga(e.target.value)} className='w-full p-2 border rounded mb-2' min="0" />
                             <input type='file' name='foto' accept='image/*' onChange={(e) => setfoto(e.target.files[0])} className='w-full p-2 border rounded mb-2' />
@@ -150,7 +159,7 @@ export default function AdminHome() {
                             <button type='button' onClick={() => setIsAdding(false)} className='bg-red-500 text-white px-4 py-2 rounded'>Batal</button>
                         </form>
                     </div>
-                        )}
+                )}
             </div>
         </div>
     );
